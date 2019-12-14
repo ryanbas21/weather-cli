@@ -18,7 +18,7 @@ parseWeather :: Response B.ByteString -> Maybe W.CurrentWeather
 parseWeather weather = decode $ weather ^. responseBody
 
 printWeather :: W.CurrentWeather -> String
-printWeather (W.CurrentWeather { .. }) = "It is " ++ (show $ W.temp main) ++ " in " ++ name
+printWeather (W.CurrentWeather { .. }) = "It is " ++ (show $ W.temp main) ++ " in " ++ name ++ " but it feels like, " ++ (show $ W.feels_like main) 
 printWeather (W.NoLocation v) = v
 
 handleWeather :: Maybe W.CurrentWeather -> W.CurrentWeather

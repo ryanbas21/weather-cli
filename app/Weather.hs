@@ -8,25 +8,28 @@ import Data.Foldable
 
 data Main = Main {
                      temp :: Double
-                   -- , feels_like :: Double
-                   -- , temp_max :: Double
-                 } deriving (Show, Eq, Generic)
+                   , feels_like :: Double
+                   , temp_max :: Double
+                 } 
+                 deriving (Show, Eq, Generic)
 
 data CurrentWeather = CurrentWeather { 
                           main :: Main
                         , name :: String
                       } 
-                    | NoLocation String  deriving (Show, Eq, Generic)
+                      | NoLocation String  deriving (Show, Eq, Generic)
 
 instance FromJSON CurrentWeather where
-  parseJSON = withObject "CurrentWeather" $ \o -> asum [
-                                                      do      
-                                                        name             <- o .: "name"
-                                                        (main :: Main)    <- o .: "main"
-                                                        return CurrentWeather{ .. }
-                                                       , do 
-                                                           pure $ NoLocation "No Valid Location" 
-                                                       ]
+  parseJSON = withObject "CurrentWeather" $ 
+    \o -> asum [
+            do      
+              name              <- o .: "name"
+              (main :: Main)    <- o .: "main"
+              pure CurrentWeather{ .. }
+             , 
+            do 
+              pure $ NoLocation "No Valid Location" 
+          ]
 
 instance ToJSON CurrentWeather
 
